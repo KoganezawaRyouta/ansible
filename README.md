@@ -8,8 +8,11 @@ $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/maste
 
 ## Ansibleのインストール
 $ brew update
+
 $ brew upgrade
+
 $ brew install python
+
 $ brew install ansible
 
 ## Ansibleの実行
