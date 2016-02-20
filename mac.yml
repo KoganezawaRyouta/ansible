@@ -1,50 +1,56 @@
 - hosts: localhost
-   connection: local
-   gather_facts: no
-   sudo: no
-   vars:
-     homebrew_taps:
-       - caskroom/cask
-       - sanemat/font
+  connection: local
+  gather_facts: no
+  sudo: no
+  vars:
+    homebrew_taps:
+      - caskroom/cask
+      - sanemat/font
 
-     # brew cask packages
-     homebrew_cask_packages:
-        - kobito
-        - alfred
-        - terraform
-        - packer
-        - sourcetree
-        - dash
-        - slack
-        - navicat-for-mysql
-        - google-chrome
-        - firefox
-        - dropbox
-        - skype
-        - firefox
-        - atom
-        - sublime-text-3
+    # brew cask packages
+    homebrew_cask_packages:
+      # - kobito # No available
+      - dash
+      - alfred
+      - terraform
+      - packer
+      - sourcetree
+      - dash
+      - slack
+      - iterm2
+      - navicat-for-mysql
+      # - google-chrome
+      - firefox
+      - dropbox
+      - skype
+      - firefox
+      - atom
+      # - tweetdeck  # No available
+      # - vagrant # No available
+      # - virtualbox 
+      # - evernote
+      # - sublime-text-3
 
-     # brew packages
-     homebrew_packages:
-        - { name: readline }
-        - { name: openssl }
-        - { name: zsh }
-        - { name: zsh-completions }
-        - { name: git }
-        - { name: git-flow }
-        - { name: nodebrew }
-        - { name: the_silver_searcher }
-        - { name: tig }
-        - { name: tmux }
-        - { name: siege }
-        - { name: python }
-        - { name: ansible }
-        - { name: nkf }
+    # brew packages
+    homebrew_packages:
+      - { name: readline }
+      - { name: openssl }
+      - { name: zsh }
+      - { name: zsh-completions }
+      - { name: git }
+      - { name: git-flow }
+      - { name: nodebrew }
+      - { name: the_silver_searcher }
+      - { name: tig }
+      - { name: tmux }
+      - { name: siege }
+      - { name: python }
+      - { name: ansible }
+      - { name: nkf }
 
   handlers:
-     - name: run fc-cache
-       shell: fc-cache -vf
+    - name: run fc-cache
+      shell: fc-cache -vf
 
   tasks:
     # brew tap
@@ -52,28 +58,28 @@
       homebrew_tap: tap="{{ item }}" state=present
       with_items: homebrew_taps
 
-     # brew update
-     - name: update homebrew
-       homebrew: update_homebrew=yes
+    # brew update
+    - name: update homebrew
+      homebrew: update_homebrew=yes
 
-     # brew instal
-     - name: install homebrew packages
-       homebrew: name="{{ item.name }}" state="{{ item.state|default('latest') }}" install_options="{{ item.install_options|default() }}"
-       with_items: homebrew_packages
+    # brew instal
+    - name: install homebrew packages
+      homebrew: name="{{ item.name }}" state="{{ item.state|default('latest') }}" install_options="{{ item.install_options|default() }}"
+      with_items: homebrew_packages
 
-     # brew cask update
-     - name: update brew-cask
-       homebrew: name=brew-cask state=latest
+    # brew cask update
+    - name: update brew-cask
+      homebrew: name=brew-cask state=latest
 
      # brew cask install
-     - name: install homebrew cask packages
-       homebrew_cask: name="{{ item }}" state=present
-       environment:
-           HOMEBREW_CASK_OPTS: --appdir=/Applications
-       with_items: homebrew_cask_packages
+    - name: install homebrew cask packages
+      homebrew_cask: name="{{ item }}" state=present
+      environment:
+        HOMEBREW_CASK_OPTS: --appdir=/Applications
+      with_items: homebrew_cask_packages
 
      # install oh-my-zsh
-     - name: install oh-my-zsh
-       shell: "sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-       args:
-         creates: ~/.oh-my-zsh
+    - name: install oh-my-zsh
+      shell: "sh -c $(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+      args:
+        creates: ~/.oh-my-zsh
